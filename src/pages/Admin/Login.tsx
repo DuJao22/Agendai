@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Lock, User, ArrowRight } from 'lucide-react';
+import { Lock, User, ArrowRight, Scissors } from 'lucide-react';
 import { tenantFetch } from '../../lib/api';
 
 export default function AdminLogin() {
@@ -58,8 +58,11 @@ export default function AdminLogin() {
         className="relative z-10 w-full max-w-md p-8 bg-surface/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 mx-4"
       >
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-display text-text-main mb-2">Acesso Restrito</h1>
-          <p className="text-text-light">Painel Administrativo Letícia Studio</p>
+          <div className="w-16 h-16 bg-zinc-950 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg border border-white/10">
+            <Scissors className="w-8 h-8 text-white" />
+          </div>
+          <h1 className="text-3xl font-display text-text-main mb-2">Barber Network</h1>
+          <p className="text-text-light">Acesso ao Painel Administrativo</p>
         </div>
 
         {error && (

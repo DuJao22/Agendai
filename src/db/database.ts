@@ -30,7 +30,8 @@ let db: DBWrapper | null = null;
 
 export async function getDb() {
   if (!db) {
-    db = new DBWrapper('sqlitecloud://ct9xsnnpvz.g1.sqlite.cloud:8860/AGENDAI.db?apikey=c9lGTn4sb98t3kl3w2gU8cMXQiKDavSd7QF3vTwHV9Q');
+    const connectionString = process.env.DATABASE_URL || 'sqlitecloud://ct9xsnnpvz.g1.sqlite.cloud:8860/AGENDAI.db?apikey=c9lGTn4sb98t3kl3w2gU8cMXQiKDavSd7QF3vTwHV9Q';
+    db = new DBWrapper(connectionString);
   }
   return db;
 }
