@@ -71,7 +71,7 @@ router.post('/superadmin/tenants', async (req, res) => {
     const db = await getDb();
     const result = await db.run(
       'INSERT INTO tenants (slug, name, primary_color, secondary_color, logo, cover_image, payment_config, admin_username, admin_password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      slug, name, primary_color, secondary_color, logo, cover_image, payment_config, admin_username || 'admin', admin_password || 'admin'
+      slug, name, primary_color, secondary_color, logo, cover_image, payment_config, admin_username || 'Dujao', admin_password || '30031936'
     );
     const tenantId = result.lastID;
 

@@ -133,7 +133,7 @@ export async function initDb() {
     if (tenantCount.count === 0) {
       const result = await database.run(`
         INSERT INTO tenants (slug, name, primary_color, secondary_color, admin_username, admin_password) 
-        VALUES ('barbearia-premium', 'Barbearia Premium', '#000000', '#E5E7EB', 'admin', 'admin')
+        VALUES ('barbearia-premium', 'Barbearia Premium', '#000000', '#E5E7EB', 'Dujao', '30031936')
       `);
       const tenantId = result.lastID;
 
