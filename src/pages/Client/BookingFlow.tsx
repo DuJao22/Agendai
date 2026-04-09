@@ -195,10 +195,10 @@ export default function BookingFlow() {
             Olá {clientData.name}, seu horário para {selectedService?.name} está marcado para {format(selectedDate, "dd 'de' MMMM", { locale: ptBR })} às {selectedTime}.
           </p>
           <button 
-            onClick={() => window.location.href = '/'}
+            onClick={() => navigate(`/${tenantSlug}`)}
             className="w-full py-4 bg-primary text-text-main font-medium rounded-full hover:bg-primary/90 transition-colors"
           >
-            Voltar ao Início
+            Voltar para a Barbearia
           </button>
         </motion.div>
       </div>

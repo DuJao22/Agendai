@@ -29,6 +29,17 @@ const resolveTenant = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
+// Public Routes
+router.get('/tenants', async (req, res) => {
+  try {
+    const db = await getDb();
+    const tenants = await db.all('SELECT id, slug, name, logo, cover_image FROM tenants WHERE status = "active" ORDER BY created_at DESC');
+    res.json(tenants);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching tenants' });
+  }
+});
+
 // Super Admin Routes
 router.post('/superadmin/login', async (req, res) => {
   const { username, password } = req.body;

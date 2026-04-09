@@ -1,15 +1,36 @@
-import sqlite3 from 'sqlite3';
-import { open, Database } from 'sqlite';
-import path from 'path';
+import { Database } from '@sqlitecloud/drivers';
 
-let db: Database | null = null;
+class DBWrapper {
+  private db: Database;
+  
+  constructor(connectionString: string) {
+    this.db = new Database(connectionString);
+  }
+  
+  async all(sql: string, ...params: any[]) {
+    return await this.db.sql(sql, ...params);
+  }
+  
+  async get(sql: string, ...params: any[]) {
+    const res = await this.db.sql(sql, ...params);
+    return res && res.length > 0 ? res[0] : undefined;
+  }
+  
+  async run(sql: string, ...params: any[]) {
+    const res = await this.db.sql(sql, ...params);
+    return { lastID: res.lastID, changes: res.changes };
+  }
+  
+  async exec(sql: string) {
+    return await this.db.exec(sql);
+  }
+}
+
+let db: DBWrapper | null = null;
 
 export async function getDb() {
   if (!db) {
-    db = await open({
-      filename: path.join(process.cwd(), 'database.sqlite'),
-      driver: sqlite3.Database
-    });
+    db = new DBWrapper('sqlitecloud://ct9xsnnpvz.g1.sqlite.cloud:8860/AGENDAI.db?apikey=c9lGTn4sb98t3kl3w2gU8cMXQiKDavSd7QF3vTwHV9Q');
   }
   return db;
 }

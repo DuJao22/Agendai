@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { format, isToday, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'motion/react';
-import { Calendar, Clock, Check, X, CheckCircle2, AlertCircle, LogOut, Plus, Edit2, Trash2, Users, TrendingUp, DollarSign, Activity, BarChart2 } from 'lucide-react';
+import { Calendar, Clock, Check, X, CheckCircle2, AlertCircle, LogOut, Plus, Edit2, Trash2, Users, TrendingUp, DollarSign, Activity, BarChart2, Share2 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 import { tenantFetch } from '../../lib/api';
@@ -291,12 +291,24 @@ export default function AdminDashboard() {
             <h1 className="text-3xl font-display text-text-main mb-2">Painel Administrativo</h1>
             <p className="text-text-light">Gerencie os agendamentos e serviços da sua barbearia</p>
           </div>
-          <button 
-            onClick={handleLogout}
-            className="mt-4 md:mt-0 flex items-center px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-          >
-            <LogOut className="w-4 h-4 mr-2" /> Sair
-          </button>
+          <div className="flex items-center gap-4 mt-4 md:mt-0">
+            <button 
+              onClick={() => {
+                const url = window.location.origin + '/' + tenantSlug;
+                navigator.clipboard.writeText(url);
+                alert('Link da sua barbearia copiado para a área de transferência!');
+              }}
+              className="flex items-center px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent/90 transition-colors shadow-sm"
+            >
+              <Share2 className="w-4 h-4 mr-2" /> Compartilhar Link
+            </button>
+            <button 
+              onClick={handleLogout}
+              className="flex items-center px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            >
+              <LogOut className="w-4 h-4 mr-2" /> Sair
+            </button>
+          </div>
         </header>
 
         {/* Tabs */}

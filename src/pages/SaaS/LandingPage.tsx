@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'motion/react';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   Scissors, 
   Clock, 
@@ -11,10 +11,43 @@ import {
   CalendarX, 
   MessageCircle, 
   ArrowRight,
-  ShieldCheck
+  ShieldCheck,
+  Store,
+  X
 } from 'lucide-react';
 
+interface Tenant {
+  id: number;
+  slug: string;
+  name: string;
+  logo: string;
+  cover_image: string;
+}
+
 export default function LandingPage() {
+  const [tenants, setTenants] = useState<Tenant[]>([]);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [loginSlug, setLoginSlug] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch('/api/tenants')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setTenants(data);
+        }
+      })
+      .catch(err => console.error('Error fetching tenants:', err));
+  }, []);
+
+  const handleAdminLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (loginSlug.trim()) {
+      navigate(`/${loginSlug.trim().toLowerCase()}/admin/login`);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-50 font-sans selection:bg-white selection:text-black">
       {/* Navbar */}
@@ -24,18 +57,70 @@ export default function LandingPage() {
             <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
               <Scissors className="w-6 h-6 text-black" />
             </div>
-            <span className="text-xl font-display font-bold tracking-tight text-white">Barber Network</span>
+            <span className="text-xl font-display font-bold tracking-tight text-white hidden sm:block">Barber Network</span>
           </div>
           <div className="flex items-center gap-4">
-            <Link to="/superadmin/login" className="text-sm font-medium text-text-light hover:text-white transition-colors hidden sm:block">
+            <button 
+              onClick={() => setIsLoginModalOpen(true)}
+              className="text-sm font-medium text-text-light hover:text-white transition-colors"
+            >
               Login Admin
-            </Link>
+            </button>
             <Link to="/criar-conta" className="px-5 py-2.5 bg-white text-black rounded-full font-medium text-sm hover:bg-gray-200 transition-colors">
               Criar Conta
             </Link>
           </div>
         </div>
       </nav>
+
+      {/* Login Admin Modal */}
+      <AnimatePresence>
+        {isLoginModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-zinc-900 border border-white/10 rounded-3xl p-8 w-full max-w-md relative shadow-2xl"
+            >
+              <button 
+                onClick={() => setIsLoginModalOpen(false)}
+                className="absolute top-6 right-6 text-zinc-500 hover:text-white transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mb-6">
+                <ShieldCheck className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">Acesso Restrito</h3>
+              <p className="text-zinc-400 mb-6">Digite o link da sua barbearia para acessar o painel administrativo.</p>
+              
+              <form onSubmit={handleAdminLogin} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-zinc-400 mb-2">Link da Barbearia</label>
+                  <div className="flex items-center">
+                    <span className="text-zinc-500 mr-2">app.com/</span>
+                    <input 
+                      type="text" 
+                      required
+                      placeholder="sua-barbearia"
+                      value={loginSlug}
+                      onChange={(e) => setLoginSlug(e.target.value)}
+                      className="w-full p-3 rounded-xl border border-white/10 bg-zinc-950 text-white placeholder:text-zinc-600 focus:border-white/30 outline-none transition-colors"
+                    />
+                  </div>
+                </div>
+                <button 
+                  type="submit"
+                  className="w-full py-3 bg-white text-black font-bold rounded-xl hover:bg-gray-200 transition-colors"
+                >
+                  Acessar Painel
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Hero Section */}
       <section className="relative pt-40 pb-20 px-6 overflow-hidden">
@@ -238,6 +323,57 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Lojas Parceiras */}
+      {tenants.length > 0 && (
+        <section className="py-24 px-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">Barbearias Parceiras</h2>
+              <p className="text-text-light text-lg max-w-2xl mx-auto">
+                Conheça algumas das barbearias que já estão utilizando o Barber Network para escalar seus negócios.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {tenants.map(tenant => (
+                <Link 
+                  key={tenant.id} 
+                  to={`/${tenant.slug}`}
+                  className="group bg-zinc-900 border border-white/10 rounded-3xl overflow-hidden hover:border-white/30 transition-all duration-300 shadow-lg hover:shadow-2xl hover:-translate-y-1 block"
+                >
+                  <div className="h-40 w-full relative bg-zinc-800 overflow-hidden">
+                    {tenant.cover_image ? (
+                      <img src={tenant.cover_image} alt="Capa" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 group-hover:scale-105 transform" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-zinc-800">
+                        <Store className="w-12 h-12 text-zinc-700" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 to-transparent"></div>
+                  </div>
+                  <div className="p-6 relative">
+                    <div className="w-16 h-16 rounded-2xl border-4 border-zinc-900 bg-zinc-800 absolute -top-10 left-6 overflow-hidden shadow-xl flex items-center justify-center">
+                      {tenant.logo ? (
+                        <img src={tenant.logo} alt="Logo" className="w-full h-full object-cover" />
+                      ) : (
+                        <Scissors className="w-6 h-6 text-zinc-500" />
+                      )}
+                    </div>
+                    <div className="mt-8">
+                      <h3 className="text-xl font-bold text-white mb-1">{tenant.name}</h3>
+                      <p className="text-sm text-zinc-400 mb-4">app.com/{tenant.slug}</p>
+                      <div className="flex items-center text-sm font-medium text-white/70 group-hover:text-white transition-colors">
+                        Acessar barbearia <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Final CTA */}
       <section className="py-32 px-6 relative overflow-hidden">
