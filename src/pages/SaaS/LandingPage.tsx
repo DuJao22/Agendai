@@ -13,7 +13,8 @@ import {
   ArrowRight,
   ShieldCheck,
   Store,
-  X
+  X,
+  ChevronDown
 } from 'lucide-react';
 
 interface Tenant {
@@ -152,13 +153,26 @@ export default function LandingPage() {
                 Profissionalizar minha barbearia
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Link>
+              <a href="#detalhes" className="w-full sm:w-auto px-8 py-4 bg-zinc-900 border border-white/10 text-white rounded-full font-bold text-lg hover:bg-zinc-800 transition-all flex items-center justify-center">
+                Ver mais informações
+              </a>
             </div>
+            
+            <motion.div 
+              animate={{ y: [0, 10, 0] }} 
+              transition={{ repeat: Infinity, duration: 2 }}
+              className="mt-16 flex justify-center"
+            >
+              <a href="#detalhes" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-zinc-500 hover:text-white hover:border-white/30 transition-all">
+                <ChevronDown className="w-6 h-6" />
+              </a>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
       {/* The Problem (Drawbacks) */}
-      <section className="py-24 px-6 bg-zinc-900/50 border-y border-white/10">
+      <section id="detalhes" className="py-24 px-6 bg-zinc-900/50 border-y border-white/10">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">O preço invisível de não ter um sistema</h2>
@@ -374,6 +388,32 @@ export default function LandingPage() {
           </div>
         </section>
       )}
+
+      {/* Pricing Section */}
+      <section className="py-24 px-6 bg-zinc-950 border-t border-white/10">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">Simples e Transparente</h2>
+          <p className="text-text-light text-lg mb-12">Sem taxas escondidas, sem comissão por agendamento. Um valor fixo para você crescer.</p>
+          
+          <div className="bg-zinc-900 border border-white/10 rounded-3xl p-10 max-w-lg mx-auto relative overflow-hidden shadow-2xl">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl"></div>
+            <h3 className="text-2xl font-bold text-white mb-2">Plano Profissional</h3>
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <span className="text-5xl font-display font-bold text-white">R$ 70</span>
+              <span className="text-zinc-400">/mês</span>
+            </div>
+            <ul className="space-y-4 mb-8 text-left">
+              <li className="flex items-center text-zinc-300"><CheckCircle2 className="w-5 h-5 text-white mr-3 shrink-0" /> Agendamentos ilimitados</li>
+              <li className="flex items-center text-zinc-300"><CheckCircle2 className="w-5 h-5 text-white mr-3 shrink-0" /> Página com a sua marca</li>
+              <li className="flex items-center text-zinc-300"><CheckCircle2 className="w-5 h-5 text-white mr-3 shrink-0" /> Painel de gestão completo</li>
+              <li className="flex items-center text-zinc-300"><CheckCircle2 className="w-5 h-5 text-white mr-3 shrink-0" /> Suporte prioritário</li>
+            </ul>
+            <Link to="/criar-conta" className="block w-full py-4 bg-white text-black rounded-xl font-bold text-lg hover:bg-gray-200 transition-colors text-center">
+              Começar agora
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Final CTA */}
       <section className="py-32 px-6 relative overflow-hidden">
