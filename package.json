@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
-    "build": "vite build && esbuild server.ts --bundle --platform=node --outfile=dist/server.cjs --format=cjs --external:express --external:vite --external:node-cron --external:@sqlitecloud/drivers",
+    "build": "vite build && esbuild server.ts --bundle --platform=node --outfile=dist/server.cjs --format=cjs --external:express --external:vite --external:node-cron --external:@sqlitecloud/drivers --external:sqlite3 --external:sqlite",
     "start": "node dist/server.cjs",
     "preview": "vite preview",
     "clean": "rm -rf dist",
