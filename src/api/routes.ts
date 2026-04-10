@@ -43,8 +43,8 @@ router.get('/tenants', async (req, res) => {
 // Super Admin Routes
 router.post('/superadmin/login', async (req, res) => {
   const { username, password } = req.body;
-  const expectedUser = process.env.SUPERADMIN_USER || 'admin';
-  const expectedPass = process.env.SUPERADMIN_PASS || 'admin123';
+  const expectedUser = process.env.SUPERADMIN_USER || 'Dujao';
+  const expectedPass = process.env.SUPERADMIN_PASS || '30031936';
 
   if (username === expectedUser && password === expectedPass) {
     res.json({ success: true, token: 'superadmin-secret-token' });
